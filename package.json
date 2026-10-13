@@ -2,7 +2,7 @@
   "name": "co-slide",
   "displayName": "Co-Slide",
   "description": "Next-generation presentation slide editor with AI agent pairing & native PPTX export",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "kkihyeon",
   "license": "MIT",
   "repository": {
