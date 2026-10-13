@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Co-Slide - 프로토타입 프리뷰</title>
+  <link rel="stylesheet" href="media/editor.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+</head>
+<body>
+
+  <!-- ================= 상단 헤더 ================= -->
+  <header class="top-header">
+    <div class="title-row">
+      <div class="brand-section">
+        <span class="brand-badge">Co-Slide</span>
+        <div class="doc-title-editor">
+          <input type="text" id="projectTitleInput" class="project-title-input" value="2025 AI 융합 수업 기획안" oninput="updateProjectTitle(this.value)" title="클릭하여 파일명 수정">
+          <span class="file-ext">.slide.json</span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="history-controls" style="display: flex; gap: 4px; align-items: center; margin-right: 8px;">
+          <button class="undo-btn" id="btnUndo" onclick="undo()" title="실행 취소 (Ctrl+Z)" disabled>↩ 취소</button>
+          <button class="undo-btn" id="btnRedo" onclick="redo()" title="다시 실행 (Ctrl+Y)" disabled>↪ 다시</button>
+        </div>
+        <button class="btn-icon btn-save" id="btnSave" onclick="handleManualSave()" title="저장">💾 저장</button>
+        <button class="btn-icon btn-history" id="btnHistory" onclick="openHistoryModal()" title="버전 기록 및 백업 복원">📜 기록</button>
+        <div class="zoom-controls">
+          <button class="zoom-btn" onclick="zoomOut()" title="축소">-</button>
+          <span class="zoom-indicator" id="zoomVal">55%</span>
+          <button class="zoom-btn" onclick="zoomIn()" title="확대">+</button>
+          <button class="zoom-btn" onclick="adjustZoomFit()" title="화면 맞춤" style="border-left: 1px solid #475569;">맞춤</button>
+        </div>
+        <button class="btn-icon btn-primary" onclick="exportToPPTX()">🚀 PPTX 내보내기</button>
+      </div>
+    </div>
+
+    <!-- 메뉴 바 1 (첫째줄): 삽입 도구 + X / Y / 너비 / 높이 -->
+    <div class="menu-row menu-row-1">
+      <div class="menu-group">
+        <button class="tool-btn" onclick="insertText()">🔤 텍스트 상자</button>
+        <button class="tool-btn dropdown-trigger-btn" id="shapeDropdownTrigger" onclick="toggleShapePopover(event)">⬚ 도형 ▼</button>
+        <button class="tool-btn dropdown-trigger-btn" id="tableDropdownTrigger" onclick="toggleTablePopover(event)">⊞ 표 삽입 ▼</button>
+        <button class="tool-btn dropdown-trigger-btn" id="mediaDropdownTrigger" onclick="toggleMediaPopover(event)">🎬 미디어 삽입 ▼</button>
+      </div>
+
+      <div class="toolbar-divider-v"></div>
+
+      <div class="menu-group prop-pos-size-group">
+        <span class="prop-inline-label">X:</span>
+        <input type="number" class="prop-compact-input" id="propX" oninput="changePropPos('x', this.value, false)" onchange="changePropPos('x', this.value, true)" placeholder="0" title="선택 개체 X 좌표">
+        <span class="prop-inline-label">Y:</span>
+        <input type="number" class="prop-compact-input" id="propY" oninput="changePropPos('y', this.value, false)" onchange="changePropPos('y', this.value, true)" placeholder="0" title="선택 개체 Y 좌표">
+        <span class="prop-inline-label">너비:</span>
+        <input type="number" class="prop-compact-input" id="propW" oninput="changePropSize('w', this.value, false)" onchange="changePropSize('w', this.value, true)" placeholder="0" title="선택 개체 너비">
+        <span class="prop-inline-label">높이:</span>
+        <input type="number" class="prop-compact-input" id="propH" oninput="changePropSize('h', this.value, false)" onchange="changePropSize('h', this.value, true)" placeholder="0" title="선택 개체 높이">
+      </div>
+    </div>
+
+    <!-- 메뉴 바 2 (둘째줄): 서식 / 폰트검색 / 폰트드롭다운 / 폰트스캔 / 크기숫자입력 / A+ A- 볼드 이탤릭 밑줄 / 정렬 -->
+    <div class="format-row disabled" id="formatRow">
+      <span class="group-label" style="color: #38BDF8; font-weight: 700;">서식</span>
+      
+      <input type="text" class="font-search-input" id="fontSearchInput" placeholder="폰트 검색..." oninput="filterFontList(this.value)" title="폰트 이름 실시간 검색">
+      <select class="font-select" id="fontFamilySelect" onchange="changeFontFamily(this.value)">
+        <option value="맑은 고딕">맑은 고딕</option>
+      </select>
+      <button class="tool-btn" onclick="scanLocalFonts()" title="내 컴퓨터에 설치된 모든 폰트 자동 스캔" style="padding: 3px 6px;">🔍 폰트 스캔</button>
+
+      <div class="toolbar-divider-v"></div>
+
+      <input type="number" class="size-input" id="fontSizeInput" min="8" max="144" value="24" oninput="changeFontSize(this.value, false)" onchange="changeFontSize(this.value, true)" title="글자 크기 직접 입력">
+      <button class="tool-btn" onclick="stepFontSize(2)" title="글자 크게 (A+)">A⁺</button>
+      <button class="tool-btn" onclick="stepFontSize(-2)" title="글자 작게 (A-)">A⁻</button>
+
+      <div class="toolbar-divider-v"></div>
+
+      <button class="tool-btn" id="btnBold" onclick="toggleBold()" style="font-weight: bold;">B</button>
+      <button class="tool-btn" id="btnItalic" onclick="toggleItalic()" style="font-style: italic;">I</button>
+      <button class="tool-btn" id="btnUnderline" onclick="toggleUnderline()" style="text-decoration: underline;">U</button>
+
+      <div class="toolbar-divider-v"></div>
+
+      <button class="tool-btn" onclick="setTextAlign('left')">좌측</button>
+      <button class="tool-btn" onclick="setTextAlign('center')">가운데</button>
+      <button class="tool-btn" onclick="setTextAlign('right')">우측</button>
+    </div>
+
+    <!-- 메뉴 바 3 (셋째줄): 글자색 / 배경색 / 테두리색 / 테두리굵기숫자입력 / 투명도숫자입력 -->
+    <div class="menu-row-3" id="styleRow">
+      <!-- 글자색 팝오버 -->
+      <div class="color-picker-btn-wrapper">
+        <button class="color-trigger-btn" id="textColorTrigger" onclick="toggleColorPopover('text', event)" title="글자색 변경">
+          <span class="color-preview-bar" id="textColorBar" style="background:#FFFFFF;"></span>
+          <span>글자색 ▼</span>
+        </button>
+      </div>
+
+      <!-- 통합 배경색 팝오버: 개체 미선택 시 슬라이드 배경색, 개체 선택 시 해당 개체/셀 배경색 -->
+      <div class="color-picker-btn-wrapper">
+        <button class="color-trigger-btn" id="unifiedBgTrigger" onclick="handleUnifiedBgClick(event)" title="배경색 (미선택 시 슬라이드 배경, 개체 선택 시 해당 개체/셀 배경)">
+          <span class="color-preview-bar" id="unifiedBgBar" style="background:#0F172A;"></span>
+          <span id="unifiedBgLabel">배경색 ▼</span>
+        </button>
+      </div>
+
+      <!-- 테두리색 팝오버 (도형 및 표 셀 테두리) -->
+      <div class="color-picker-btn-wrapper">
+        <button class="color-trigger-btn" id="strokeColorTrigger" onclick="toggleColorPopover('stroke', event)" title="테두리 색상 (도형 및 표 셀)">
+          <span class="color-preview-bar" id="strokeColorBar" style="background:#CBD5E1;"></span>
+          <span>테두리색 ▼</span>
+        </button>
+      </div>
+
+      <div class="toolbar-divider-v"></div>
+
+      <!-- 테두리 굵기 숫자 입력 (도형 및 표 셀, PPT 표준 pt 단위) -->
+      <span class="prop-inline-label">테두리 굵기:</span>
+      <input type="number" class="prop-compact-input" id="propStrokeWidth" min="0" max="72" step="0.25" value="1" oninput="changeStrokeWidth(this.value)" onchange="changeStrokeWidth(this.value)" title="테두리 굵기 (pt, PPT 표준 단위)">
+      <span class="prop-unit-label">pt</span>
+
+      <div class="toolbar-divider-v"></div>
+
+      <!-- 투명도 숫자 입력 -->
+      <span class="prop-inline-label">투명도:</span>
+      <input type="number" class="prop-compact-input" id="propOpacity" min="0" max="100" value="100" oninput="changeOpacity(this.value)" onchange="changeOpacity(this.value)" title="불투명도 (0~100%)">
+      <span class="prop-unit-label">%</span>
+
+      <div class="toolbar-divider-v"></div>
+
+      <!-- [기현쌤 요청 반영]: 통합 전체 선택 버튼 (표 셀 선택 시: 표 전체 셀 선택 / 그 외: 슬라이드 내 모든 개체 선택) -->
+      <button class="tool-btn" id="btnSelectAll" onclick="handleSelectAll()" title="전체 선택 (표 선택 시: 표 전체 셀 선택 / 그 외: 슬라이드 내 모든 개체 선택)" style="padding: 3px 8px; font-weight: 600;">🔲 전체 선택</button>
+
+      <!-- [기현쌤 요청 반영]: 슬라이드 중앙선(안내선) 토글 체크박스 -->
+      <label class="guideline-toggle-label" title="슬라이드 가로와 세로 중앙 안내선(눈금선) 표시/숨김">
+        <input type="checkbox" id="chkGuideline" onchange="toggleGuideline(this.checked)">
+        <span>안내선</span>
+      </label>
+    </div>
+  </header>
+
+  <!-- ================= 메인 작업 영역 ================= -->
+  <div class="workspace">
+    <!-- 좌측 개요 바 (리사이저블 & 하단 슬라이드 추가 버튼) -->
+    <aside class="left-nav" id="leftNav">
+      <div class="nav-header">
+        <span>슬라이드 개요</span>
+        <button class="tool-btn" onclick="addNewSlide()" style="padding: 2px 8px; font-weight: bold;" title="새 슬라이드 추가">+</button>
+      </div>
+      <div class="slide-list" id="slideList"></div>
+    </aside>
+
+    <!-- 분할선 리사이저 -->
+    <div class="nav-resizer" id="navResizer" title="드래그하여 개요 창 너비 조절"></div>
+
+    <!-- 중앙 16:9 캔버스 영역 -->
+    <main class="canvas-container-outer" id="canvasOuter">
+      <div class="canvas-paper-wrapper">
+        <div class="canvas-paper">
+          <canvas id="slideCanvas"></canvas>
+          <textarea id="tableCellEditor" class="table-cell-editor" placeholder="셀 내용 입력"></textarea>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- [요청 반영]: 도형 선택 드롭다운 팝오버 -->
+  <div class="dropdown-menu-popover" id="shapePopover">
+    <div class="popover-grid-2">
+      <button class="popover-grid-btn" onclick="insertShape('rect'); hideAllPopovers();">⬛ 사각형</button>
+      <button class="popover-grid-btn" onclick="insertShape('roundedRect'); hideAllPopovers();">▢ 둥근 사각</button>
+      <button class="popover-grid-btn" onclick="insertShape('circle'); hideAllPopovers();">⭕ 원형</button>
+      <button class="popover-grid-btn" onclick="insertShape('triangle'); hideAllPopovers();">🔺 삼각형</button>
+      <button class="popover-grid-btn" onclick="insertShape('arrow'); hideAllPopovers();">➡️ 화살표</button>
+      <button class="popover-grid-btn" onclick="insertShape('line'); hideAllPopovers();">➖ 직선</button>
+      <button class="popover-grid-btn" onclick="insertShape('star'); hideAllPopovers();">⭐ 별</button>
+      <button class="popover-grid-btn" onclick="insertShape('callout'); hideAllPopovers();">💬 말풍선</button>
+    </div>
+  </div>
+
+  <!-- [요청 반영]: 표 삽입 드롭다운 팝오버 -->
+  <div class="dropdown-menu-popover" id="tablePopover" style="min-width: 210px;">
+    <div style="font-size: 11px; font-weight: 700; color: #94A3B8; margin-bottom: 6px;">빠른 크기 선택</div>
+    <div class="popover-grid-2">
+      <button class="popover-grid-btn" onclick="insertTable(2, 2); hideAllPopovers();">2 × 2 표</button>
+      <button class="popover-grid-btn" onclick="insertTable(3, 3); hideAllPopovers();">3 × 3 표</button>
+      <button class="popover-grid-btn" onclick="insertTable(4, 3); hideAllPopovers();">4행 3열</button>
+      <button class="popover-grid-btn" onclick="insertTable(5, 4); hideAllPopovers();">5행 4열</button>
+    </div>
+    <div class="table-custom-row">
+      <span>행: <input type="number" id="tblRowsInput" min="1" max="10" value="3"></span>
+      <span>열: <input type="number" id="tblColsInput" min="1" max="8" value="3"></span>
+      <button class="tool-btn" style="padding: 3px 8px; font-weight: 600;" onclick="insertCustomTable(); hideAllPopovers();">삽입</button>
+    </div>
+  </div>
+
+  <!-- [요청 반영]: 미디어 삽입 드롭다운 팝오버 -->
+  <div class="dropdown-menu-popover" id="mediaPopover" style="min-width: 230px;">
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <label class="popover-grid-btn" style="cursor: pointer;">
+        🖼️ 이미지 파일 업로드
+        <input type="file" accept="image/*" style="display: none;" onchange="insertImageFile(this); hideAllPopovers();">
+      </label>
+      <label class="popover-grid-btn" style="cursor: pointer;" title="내 컴퓨터의 실제 동영상 파일(.mp4, .mov 등)을 슬라이드에 삽입합니다">
+        🎬 내 PC 동영상 파일 삽입 (.mp4)
+        <input type="file" accept="video/*" style="display: none;" onchange="insertVideoFile(this); hideAllPopovers();">
+      </label>
+    </div>
+  </div>
+
+  <!-- 통합 색상 팝오버 -->
+  <div class="color-popover" id="colorPopover">
+    <div class="popover-row">
+      <span class="popover-label">직접 선택</span>
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <button class="eyedropper-btn" onclick="triggerEyeDropper()" title="화면 색상 추출">🧪 스포이드</button>
+        <input type="color" id="popoverColorInput" onchange="applyColorChoice(this.value)" style="width:26px; height:24px; cursor:pointer;">
+      </div>
+    </div>
+    
+    <div>
+      <span class="popover-label">기본 색상</span>
+      <div class="color-swatches-grid" style="margin-top: 6px;">
+        <div class="color-swatch-chip transparent-chip" onclick="applyColorChoice('transparent')" title="투명 (배경 없음)"></div>
+        <div class="color-swatch-chip" style="background:#FFFFFF;" onclick="applyColorChoice('#FFFFFF')" title="화이트"></div>
+        <div class="color-swatch-chip" style="background:#000000;" onclick="applyColorChoice('#000000')" title="블랙"></div>
+        <div class="color-swatch-chip" style="background:#EF4444;" onclick="applyColorChoice('#EF4444')" title="레드"></div>
+        <div class="color-swatch-chip" style="background:#F97316;" onclick="applyColorChoice('#F97316')" title="오렌지"></div>
+        <div class="color-swatch-chip" style="background:#FACC15;" onclick="applyColorChoice('#FACC15')" title="옐로우"></div>
+        <div class="color-swatch-chip" style="background:#22C55E;" onclick="applyColorChoice('#22C55E')" title="그린"></div>
+        <div class="color-swatch-chip" style="background:#3B82F6;" onclick="applyColorChoice('#3B82F6')" title="블루"></div>
+        <div class="color-swatch-chip" style="background:#6366F1;" onclick="applyColorChoice('#6366F1')" title="인디고"></div>
+        <div class="color-swatch-chip" style="background:#A855F7;" onclick="applyColorChoice('#A855F7')" title="퍼플"></div>
+      </div>
+    </div>
+
+    <div>
+      <span class="popover-label">최근 사용 색상</span>
+      <div class="recent-colors-row" id="recentColorsContainer" style="margin-top: 6px;"></div>
+    </div>
+  </div>
+
+  <!-- [기현쌤 요청 반영]: 우클릭 컨텍스트 메뉴 -->
+  <div class="context-menu" id="contextMenu">
+    <!-- [기현쌤 요청 반영]: 표 셀 선택 시 복사/붙여넣기 위에 나타나는 표 설정 서브메뉴 (호버/클릭 시 옆에 플라이아웃) -->
+    <div class="context-submenu-wrapper" id="ctxTableSettingsWrapper" style="display: none;" onclick="event.stopPropagation()">
+      <div class="context-menu-item has-submenu" id="ctxTableSettingsTrigger" onclick="toggleCtxTableFlyout(event)">
+        <span>⊞ 표 설정</span>
+        <span class="submenu-arrow">▶</span>
+      </div>
+      <!-- 표 설정 서브 플라이아웃 패널 -->
+      <div class="context-flyout-panel" id="ctxTableFlyout" onclick="event.stopPropagation()">
+        <div class="flyout-header">
+          <span>표 & 셀 편집</span>
+        </div>
+        <div class="flyout-cell-info" id="selectedCellLabel">선택: <span id="selectedCellCoord" style="color: #38BDF8; font-weight: 700;">1행 1열</span></div>
+        
+        <div class="flyout-row">
+          <span class="prop-inline-label">셀 내용:</span>
+          <input type="text" class="table-inline-input" id="tableCellInput" placeholder="셀 내용 입력" oninput="updateSelectedCellText(this.value)" style="width: 130px;">
+        </div>
+
+        <div class="flyout-divider"></div>
+
+        <div style="font-size: 11px; color: #94A3B8; margin-bottom: 4px;">행 / 열 관리</div>
+        <div class="inline-radio-group">
+          <label><input type="radio" name="tblTargetType" value="row" checked onchange="updateTableDpadUI()"> 행(Row)</label>
+          <label><input type="radio" name="tblTargetType" value="col" onchange="updateTableDpadUI()"> 열(Col)</label>
+        </div>
+        <div class="inline-radio-group" style="margin-top: 4px;">
+          <label><input type="radio" name="tblActionType" value="insert" checked onchange="updateTableDpadUI()"> 삽입</label>
+          <label><input type="radio" name="tblActionType" value="delete" onchange="updateTableDpadUI()"> 삭제</label>
+        </div>
+
+        <div class="btn-group-2x2" style="margin-top: 8px;">
+          <button class="tool-btn" id="tblBtnUp" onclick="onTableAction('up')">⬆️ 위</button>
+          <button class="tool-btn" id="tblBtnDown" onclick="onTableAction('down')">⬇️ 아래</button>
+          <button class="tool-btn" id="tblBtnLeft" onclick="onTableAction('left')">⬅️ 왼쪽</button>
+          <button class="tool-btn" id="tblBtnRight" onclick="onTableAction('right')">➡️ 오른쪽</button>
+        </div>
+      </div>
+      <div class="context-divider"></div>
+    </div>
+
+    <div class="context-menu-row-2">
+      <div class="context-menu-item" onclick="ctxCopy()" title="복사 (Ctrl+C)"><span>복사</span></div>
+      <div class="context-menu-item" onclick="ctxPaste()" title="붙여넣기 (Ctrl+V)"><span>붙여넣기</span></div>
+    </div>
+    <div class="context-divider"></div>
+    <div class="context-menu-item center-text" onclick="ctxCut()" title="잘라내기 (Ctrl+X)"><span>잘라내기</span></div>
+    <div class="context-divider"></div>
+    <div class="context-menu-row-2">
+      <div class="context-menu-item" onclick="ctxGroup()" title="그룹화 (Ctrl+G)"><span>그룹화</span></div>
+      <div class="context-menu-item" onclick="ctxUngroup()" title="그룹 해제 (Ctrl+Shift+G)"><span>그룹 해제</span></div>
+    </div>
+    <div class="context-divider"></div>
+    <!-- [기현쌤 요청 반영]: 위로/맨위로, 아래로/맨아래로 + 가운데 세로 구분선 -->
+    <div class="context-menu-paired-grid">
+      <div class="context-menu-item" onclick="ctxBringForward()" title="한 단계 위로"><span>위로</span></div>
+      <div class="paired-v-divider"></div>
+      <div class="context-menu-item" onclick="ctxBringToFront()" title="맨 위로"><span>맨 위로</span></div>
+      <div class="context-menu-item" onclick="ctxSendBackward()" title="한 단계 아래로"><span>아래로</span></div>
+      <div class="paired-v-divider"></div>
+      <div class="context-menu-item" onclick="ctxSendToBack()" title="맨 아래로"><span>맨 아래로</span></div>
+    </div>
+    <div class="context-divider"></div>
+    <div class="context-menu-item danger center-text" onclick="ctxDelete()" style="color: #F87171;" title="삭제 (Del)"><span>삭제</span></div>
+  </div>
+
+  <div class="toast-msg" id="toast">알림 메시지</div>
+
+  <!-- [기현쌤 요청 반영]: 히스토리(버전 기록 및 백업 복원) 모달 -->
+  <div class="history-modal-overlay" id="historyModalOverlay" onclick="closeHistoryModal(event)">
+    <div class="history-modal-card" onclick="event.stopPropagation()">
+      <div class="history-modal-header">
+        <div class="history-modal-title">
+          <span>📜 버전 기록 (히스토리)</span>
+        </div>
+        <button class="history-close-btn" onclick="closeHistoryModal()" title="닫기">✕</button>
+      </div>
+      <div class="history-modal-desc">
+        저장 시점마다 자동 백업된 버전 목록입니다. 원하는 시점을 클릭하여 언제든 안전하게 복원할 수 있습니다.
+      </div>
+      <div class="history-modal-actions-bar">
+        <button class="history-new-backup-btn" onclick="createManualBackup()">➕ 현재 상태 즉시 백업</button>
+        <button class="history-clear-btn" onclick="clearOldBackups()">🧹 오래된 백업 정리</button>
+      </div>
+      <div class="history-list-container" id="historyListContainer">
+        <!-- 자바스크립트로 동적 렌더링 -->
+      </div>
+    </div>
+  </div>
+
+  <script src="media/editor.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const demoDeck = {
+        "version": "1.0",
+        "title": "2025 AI 융합 수업 기획안",
+        "theme": {
+          "primary": "#2563EB",
+          "secondary": "#64748B",
+          "background": "#F8FAFC"
+        },
+        "slides": [
+          {
+            "id": "slide-1",
+            "title": "표지 슬라이드",
+            "background": "#0F172A",
+            "elements": [
+              {
+                "id": "el-1",
+                "type": "text",
+                "text": "2025 AI 융합 수업 기획안",
+                "left": 200,
+                "top": 340,
+                "width": 1520,
+                "fontSize": 64,
+                "fontWeight": "bold",
+                "fill": "#FFFFFF",
+                "align": "center",
+                "fontFamily": "맑은 고딕"
+              },
+              {
+                "id": "el-2",
+                "type": "text",
+                "text": "Antigravity IDE & Slide Studio로 구현하는 차세대 프레젠테이션",
+                "left": 200,
+                "top": 460,
+                "width": 1520,
+                "fontSize": 28,
+                "fill": "#94A3B8",
+                "align": "center",
+                "fontFamily": "맑은 고딕"
+              },
+              {
+                "id": "el-3",
+                "type": "rect",
+                "left": 860,
+                "top": 540,
+                "width": 200,
+                "height": 6,
+                "fill": "#3B82F6",
+                "rx": 3,
+                "ry": 3
+              }
+            ]
+          },
+          {
+            "id": "slide-2",
+            "title": "핵심 3대 추진 전략",
+            "background": "#F8FAFC",
+            "elements": [
+              {
+                "id": "el-4",
+                "type": "text",
+                "text": "프로젝트 핵심 추진 전략",
+                "left": 100,
+                "top": 100,
+                "width": 1400,
+                "height": 70,
+                "fontSize": 44,
+                "fontWeight": "bold",
+                "fill": "#0F172A",
+                "fontFamily": "맑은 고딕"
+              },
+              {
+                "id": "el-5",
+                "type": "rect",
+                "left": 100,
+                "top": 240,
+                "width": 520,
+                "height": 640,
+                "fill": "#FFFFFF",
+                "stroke": "#CBD5E1",
+                "strokeWidth": 2,
+                "rx": 16,
+                "ry": 16
+              },
+              {
+                "id": "el-6",
+                "type": "text",
+                "text": "01. 실시간 협업",
+                "left": 140,
+                "top": 290,
+                "width": 440,
+                "fontSize": 32,
+                "fontWeight": "bold",
+                "fill": "#2563EB",
+                "fontFamily": "맑은 고딕"
+              },
+              {
+                "id": "el-7",
+                "type": "text",
+                "text": "사용자의 마우스 조작과\nAI 에이전트의 지능형 편집이\n파일 락 없이 0.2초 만에\n실시간으로 동기화됩니다.",
+                "left": 140,
+                "top": 360,
+                "width": 440,
+                "fontSize": 22,
+                "fill": "#475569",
+                "fontFamily": "맑은 고딕"
+              },
+              {
+                "id": "el-8",
+                "type": "rect",
+                "left": 690,
+                "top": 240,
+                "width": 520,
+                "height": 640,
+                "fill": "#FFFFFF",
+                "stroke": "#CBD5E1",
+                "strokeWidth": 2,
+                "rx": 16,
+                "ry": 16
+              },
+              {
+                "id": "el-9",
+                "type": "text",
+                "text": "02. 네이티브 PPTX",
+                "left": 730,
+                "top": 290,
+                "width": 440,
+                "fontSize": 32,
+                "fontWeight": "bold",
+                "fill": "#0D9488",
+                "fontFamily": "맑은 고딕"
+              },
+              {
+                "id": "el-10",
+                "type": "text",
+                "text": "단순한 이미지 캡처가 아닌\n순수 파워포인트 도형, 텍스트,\n테이블 객체로 100% 온전하게\n변환되어 즉시 편집 가능합니다.",
+                "left": 730,
+                "top": 360,
+                "width": 440,
+                "fontSize": 22,
+                "fill": "#475569",
+                "fontFamily": "맑은 고딕"
+              },
+              {
+                "id": "el-11",
+                "type": "rect",
+                "left": 1280,
+                "top": 240,
+                "width": 520,
+                "height": 640,
+                "fill": "#FFFFFF",
+                "stroke": "#CBD5E1",
+                "strokeWidth": 2,
+                "rx": 16,
+                "ry": 16
+              },
+              {
+                "id": "el-12",
+                "type": "text",
+                "text": "03. 섬세한 WYSIWYG",
+                "left": 1320,
+                "top": 290,
+                "width": 440,
+                "fontSize": 32,
+                "fontWeight": "bold",
+                "fill": "#EA580C",
+                "fontFamily": "맑은 고딕"
+              },
+              {
+                "id": "el-13",
+                "type": "text",
+                "text": "Shift 키 정비율 리사이징,\n직선 축 고정 이동,\n파워포인트식 빠른 서식 바,\n투명도 슬라이더를 지원합니다.",
+                "left": 1320,
+                "top": 360,
+                "width": 440,
+                "fontSize": 22,
+                "fill": "#475569",
+                "fontFamily": "맑은 고딕"
+              }
+            ]
+          }
+        ]
+      };
+
+      window.demoDeck = demoDeck;
+      setTimeout(() => {
+        const saved = localStorage.getItem('slideStudio_deckData_autosave');
+        if (!saved && window.loadDeckData) {
+          window.loadDeckData(demoDeck);
+        }
+      }, 50);
+    });
+  </script>
+</body>
+</html>

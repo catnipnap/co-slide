@@ -1,0 +1,182 @@
+{
+  "version": "1.0",
+  "title": "2025 AI 융합 교육 프로젝트 기획안",
+  "theme": {
+    "primary": "#2563EB",
+    "secondary": "#64748B",
+    "background": "#F8FAFC"
+  },
+  "slides": [
+    {
+      "id": "slide-1",
+      "title": "표지 슬라이드",
+      "background": "#0F172A",
+      "elements": [
+        {
+          "id": "el-1",
+          "type": "text",
+          "text": "2025 AI 융합 수업 기획안",
+          "left": 200,
+          "top": 340,
+          "width": 1520,
+          "fontSize": 64,
+          "fontWeight": "bold",
+          "fill": "#FFFFFF",
+          "align": "center",
+          "fontFamily": "맑은 고딕"
+        },
+        {
+          "id": "el-2",
+          "type": "text",
+          "text": "Antigravity IDE & Slide Studio로 구현하는 차세대 프레젠테이션",
+          "left": 200,
+          "top": 460,
+          "width": 1520,
+          "fontSize": 28,
+          "fill": "#94A3B8",
+          "align": "center",
+          "fontFamily": "맑은 고딕"
+        },
+        {
+          "id": "el-3",
+          "type": "rect",
+          "left": 860,
+          "top": 540,
+          "width": 200,
+          "height": 6,
+          "fill": "#3B82F6",
+          "rx": 3,
+          "ry": 3
+        }
+      ]
+    },
+    {
+      "id": "slide-2",
+      "title": "핵심 3대 추진 전략",
+      "background": "#F8FAFC",
+      "elements": [
+        {
+          "id": "el-4",
+          "type": "text",
+          "text": "프로젝트 핵심 추진 전략",
+          "left": 100,
+          "top": 100,
+          "width": 1400,
+          "height": 70,
+          "fontSize": 44,
+          "fontWeight": "bold",
+          "fill": "#0F172A",
+          "fontFamily": "맑은 고딕"
+        },
+        {
+          "id": "el-5",
+          "type": "rect",
+          "left": 100,
+          "top": 240,
+          "width": 520,
+          "height": 640,
+          "fill": "#FFFFFF",
+          "stroke": "#CBD5E1",
+          "strokeWidth": 2,
+          "rx": 16,
+          "ry": 16
+        },
+        {
+          "id": "el-6",
+          "type": "text",
+          "text": "01. 실시간 협업",
+          "left": 140,
+          "top": 290,
+          "width": 440,
+          "fontSize": 32,
+          "fontWeight": "bold",
+          "fill": "#2563EB",
+          "fontFamily": "맑은 고딕"
+        },
+        {
+          "id": "el-7",
+          "type": "text",
+          "text": "사용자의 마우스 조작과\nAI 에이전트의 지능형 편집이\n파일 락 없이 0.2초 만에\n실시간으로 동기화됩니다.",
+          "left": 140,
+          "top": 360,
+          "width": 440,
+          "fontSize": 22,
+          "fill": "#475569",
+          "fontFamily": "맑은 고딕"
+        },
+        {
+          "id": "el-8",
+          "type": "rect",
+          "left": 690,
+          "top": 240,
+          "width": 520,
+          "height": 640,
+          "fill": "#FFFFFF",
+          "stroke": "#CBD5E1",
+          "strokeWidth": 2,
+          "rx": 16,
+          "ry": 16
+        },
+        {
+          "id": "el-9",
+          "type": "text",
+          "text": "02. 네이티브 PPTX",
+          "left": 730,
+          "top": 290,
+          "width": 440,
+          "fontSize": 32,
+          "fontWeight": "bold",
+          "fill": "#0D9488",
+          "fontFamily": "맑은 고딕"
+        },
+        {
+          "id": "el-10",
+          "type": "text",
+          "text": "단순한 이미지 캡처가 아닌\n순수 파워포인트 도형, 텍스트,\n테이블 객체로 100% 온전하게\n변환되어 즉시 편집 가능합니다.",
+          "left": 730,
+          "top": 360,
+          "width": 440,
+          "fontSize": 22,
+          "fill": "#475569",
+          "fontFamily": "맑은 고딕"
+        },
+        {
+          "id": "el-11",
+          "type": "rect",
+          "left": 1280,
+          "top": 240,
+          "width": 520,
+          "height": 640,
+          "fill": "#FFFFFF",
+          "stroke": "#CBD5E1",
+          "strokeWidth": 2,
+          "rx": 16,
+          "ry": 16
+        },
+        {
+          "id": "el-12",
+          "type": "text",
+          "text": "03. 섬세한 WYSIWYG",
+          "left": 1320,
+          "top": 290,
+          "width": 440,
+          "fontSize": 32,
+          "fontWeight": "bold",
+          "fill": "#EA580C",
+          "fontFamily": "맑은 고딕"
+        },
+        {
+          "id": "el-13",
+          "type": "text",
+          "text": "Shift 키 정비율 리사이징,\n직선 축 고정 이동,\n파워포인트식 빠른 서식 바,\n투명도 슬라이더를 지원합니다.",
+          "left": 1320,
+          "top": 360,
+          "width": 440,
+          "fontSize": 22,
+          "fill": "#475569",
+          "fontFamily": "맑은 고딕"
+        }
+      ]
+    }
+  ]
+}

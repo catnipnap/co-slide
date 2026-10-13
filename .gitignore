@@ -1,0 +1,7 @@
+node_modules/
+*.vsix
+.slide-studio/cache/
+.slide-studio/backups/
+*.log
+.DS_Store
+Thumbs.db
