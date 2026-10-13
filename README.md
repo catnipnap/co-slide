@@ -62,7 +62,7 @@ Instead of creating slides alone in external software, Co-Slide bridges the visu
 ### 📬 Contact & Support
 Have questions, bug reports, or suggestions? Feel free to reach out!  
 📧 **Email**: [rlgus5126@gmail.com](mailto:rlgus5126@gmail.com)  
-🐙 **GitHub**: [https://github.com/kkihyeon/co-slide](https://github.com/kkihyeon/co-slide)
+🐙 **GitHub**: [https://github.com/catnipnap/co-slide](https://github.com/catnipnap/co-slide)
 
 ---
 
@@ -122,7 +122,7 @@ VS Code 및 Google Antigravity IDE 내부에서 동작하는 네이티브 커스
 ### 📬 문의 및 피드백 (Contact & Support)
 질문, 개선 아이디어, 버그 제보 등 언제든지 편하게 연락주세요!  
 📧 **Email**: [rlgus5126@gmail.com](mailto:rlgus5126@gmail.com)  
-🐙 **GitHub**: [https://github.com/kkihyeon/co-slide](https://github.com/kkihyeon/co-slide)
+🐙 **GitHub**: [https://github.com/catnipnap/co-slide](https://github.com/catnipnap/co-slide)
 
 ---
 
