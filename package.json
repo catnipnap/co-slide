@@ -3,7 +3,7 @@
   "displayName": "Co-Slide",
   "description": "실시간 AI 에이전트 협업 및 PPTX 네이티브 출력을 지원하는 차세대 프레젠테이션 에디터",
   "version": "0.1.0",
-  "publisher": "antigravity",
+  "publisher": "kkihyeon",
   "license": "MIT",
   "repository": {
     "type": "git",
