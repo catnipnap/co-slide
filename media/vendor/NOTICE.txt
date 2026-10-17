@@ -1,0 +1,4 @@
+Bundled third-party libraries (loaded locally so the editor works offline and under a strict CSP)
+
+- fabric.min.js     : Fabric.js 5.3.x  - MIT License - https://github.com/fabricjs/fabric.js
+- pptxgen.bundle.js : PptxGenJS 3.12.0 - MIT License - https://github.com/gitbrent/PptxGenJS

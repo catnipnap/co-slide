@@ -5,4 +5,5 @@ tsconfig.json
 .git/**
 .gitignore
 preview.html
+presentation.slide.json
 samples/**

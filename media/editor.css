@@ -31,14 +31,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-bottom: 1px solid #334155;
+  gap: 8px;
+  overflow-x: auto;
 }
 
 .brand-section {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .brand-badge {
@@ -49,6 +53,8 @@ body {
   padding: 3px 8px;
   border-radius: 4px;
   letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .doc-title-editor {
@@ -59,6 +65,9 @@ body {
   border-radius: 6px;
   padding: 2px 8px;
   transition: border-color 0.15s;
+  max-width: 260px;
+  min-width: 120px;
+  flex-shrink: 1;
 }
 
 .doc-title-editor:focus-within {
@@ -74,8 +83,9 @@ body {
   font-size: 13px;
   font-weight: 600;
   outline: none;
-  width: 240px;
+  width: 100%;
   user-select: text;
+  text-overflow: ellipsis;
 }
 
 .file-ext {
@@ -83,12 +93,15 @@ body {
   font-size: 12px;
   font-weight: 500;
   margin-left: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .top-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .zoom-controls {
@@ -98,17 +111,20 @@ body {
   border: 1px solid #475569;
   border-radius: 6px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .zoom-btn {
   background: transparent;
   border: none;
   color: #CBD5E1;
-  padding: 4px 10px;
+  padding: 4px 8px;
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
   transition: background 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .zoom-btn:hover {
@@ -120,23 +136,27 @@ body {
   font-size: 11px;
   font-weight: 600;
   color: #38BDF8;
-  padding: 0 8px;
-  min-width: 48px;
+  padding: 0 6px;
+  min-width: 42px;
   text-align: center;
+  white-space: nowrap;
 }
 
 .btn-icon {
   background: transparent;
   border: 1px solid #475569;
   color: #CBD5E1;
-  padding: 5px 12px;
+  padding: 5px 10px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  word-break: keep-all;
 }
 
 .btn-icon:hover {
@@ -150,6 +170,9 @@ body {
   border-color: #2563EB;
   color: #FFFFFF;
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  word-break: keep-all;
 }
 
 .btn-primary:hover {
@@ -161,18 +184,20 @@ body {
 .menu-row {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 6px 16px;
+  gap: 10px;
+  padding: 5px 12px;
   background: #1E293B;
   overflow-x: auto;
+  white-space: nowrap;
 }
 
 .menu-group {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   border-right: 1px solid #334155;
-  padding-right: 12px;
+  padding-right: 10px;
+  flex-shrink: 0;
 }
 
 .menu-group:last-child {
@@ -185,21 +210,26 @@ body {
   margin-right: 4px;
   text-transform: uppercase;
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .tool-btn {
   background: #334155;
   border: 1px solid transparent;
   color: #E2E8F0;
-  padding: 5px 10px;
+  padding: 4px 8px;
   border-radius: 5px;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   transition: all 0.12s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  word-break: keep-all;
 }
 
 .tool-btn:hover:not(:disabled) {
@@ -223,29 +253,32 @@ body {
 .format-row {
   background: #0F172A;
   border-top: 1px solid #334155;
-  padding: 6px 16px;
+  padding: 6px 14px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   transition: opacity 0.2s ease;
   overflow-x: auto;
 }
 
-.format-row.disabled {
+/* 개체가 선택되지 않았을 때 서식 컨트롤만 흐리게 한다. 폰트 스캔 버튼은 선택과 무관하므로 항상 눌러야 한다 */
+.format-row.disabled > *:not(#btnScanFonts) {
   opacity: 0.35;
   pointer-events: none;
 }
 
-/* [요청 반영 5]: 폰트 검색 입력창 */
+/* 폰트 검색 입력창 */
 .font-search-input {
   background: #1E293B;
   border: 1px solid #475569;
   color: #F8FAFC;
-  padding: 4px 8px;
+  padding: 4px 6px;
   border-radius: 4px;
   font-size: 12px;
   outline: none;
-  width: 110px;
+  width: 90px;
+  min-width: 0;
+  flex: 0 0 90px;
   user-select: text;
   transition: border-color 0.15s;
 }
@@ -258,11 +291,19 @@ body {
   background: #1E293B;
   border: 1px solid #475569;
   color: #F8FAFC;
-  padding: 4px 8px;
+  padding: 4px 6px;
   border-radius: 4px;
   font-size: 12px;
   outline: none;
   cursor: pointer;
+  /* 폰트명이 길어도 글자 크기 입력칸을 절대 밀어내지 않도록 130px로 컴팩트 고정 */
+  width: 130px;
+  max-width: 130px;
+  min-width: 0;
+  flex: 0 0 130px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 /* ================= 4줄 메뉴바 전용 컴팩트 스타일 ================= */
@@ -272,6 +313,88 @@ body {
   background: #334155;
   margin: 0 4px;
   flex-shrink: 0;
+}
+
+/* 기본 브라우저 위아래 스피너 숨기기 */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+input[type="number"] {
+  -moz-appearance: textfield !important;
+}
+
+/* 커스텀 다크 테마 넘버 스텝퍼 컴포넌트 */
+.num-stepper-box {
+  display: inline-flex;
+  align-items: stretch;
+  position: relative;
+  background: #1E293B;
+  border: 1px solid #475569;
+  border-radius: 4px;
+  overflow: hidden;
+  vertical-align: middle;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.num-stepper-box:focus-within {
+  border-color: #38BDF8;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.3);
+}
+
+.num-stepper-box input[type="number"] {
+  border: none !important;
+  background: transparent !important;
+  color: #F8FAFC !important;
+  outline: none !important;
+  margin: 0 !important;
+  padding: 3px 4px !important;
+  font-size: 11px !important;
+  text-align: right !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  flex: 1 !important;
+}
+
+.num-stepper-btns {
+  display: flex;
+  flex-direction: column;
+  width: 16px;
+  background: #0F172A;
+  border-left: 1px solid #334155;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.num-stepper-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #1E293B;
+  color: #94A3B8;
+  font-size: 7px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.num-stepper-btn:hover {
+  background: #334155;
+  color: #38BDF8;
+}
+
+.num-stepper-btn:active {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+.num-stepper-up {
+  border-bottom: 1px solid #334155;
 }
 
 .prop-compact-input {
@@ -474,7 +597,7 @@ body {
   border-color: #FFFFFF;
 }
 
-/* [기현쌤 요청 반영]: 투명색 샘플 칩 (흰 바탕에 빨간색 대각선 빗금) */
+/* 투명색 샘플 칩 (흰 바탕에 빨간색 대각선 빗금) */
 .color-swatch-chip.transparent-chip {
   background-color: #FFFFFF !important;
   background-image: linear-gradient(45deg, transparent calc(50% - 1.5px), #EF4444 calc(50% - 1.5px), #EF4444 calc(50% + 1.5px), transparent calc(50% + 1.5px)) !important;
@@ -819,7 +942,7 @@ body {
   color: #38BDF8;
 }
 
-/* [요청 반영 1]: 중앙 캔버스 스크롤 및 줌 뷰포트 (사방 잘림 없는 margin:auto 센터링) */
+/* 중앙 캔버스 스크롤 및 줌 뷰포트 (사방 잘림 없는 margin:auto 센터링) */
 .canvas-container-outer {
   flex: 1;
   background: #0B0F19;
@@ -835,18 +958,79 @@ body {
   width: max-content;
   height: max-content;
   display: flex;
-  padding: 60px;
+  padding: 24px; /* editor.js의 FIT_PADDING과 동일하게 유지 */
   box-sizing: border-box;
 }
 
 .canvas-paper {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
   border-radius: 4px;
-  overflow: hidden;
+  overflow: visible; /* 슬라이드 영역 밖으로 삐져나간 개체의 조절점(핸들)이 잘리지 않고 보이도록 허용 */
   background: #FFFFFF;
   position: relative;
   flex-shrink: 0;
   margin: auto; /* 화면보다 작을 때는 정중앙 배치, 화면보다 커지면 왼쪽/위쪽 0부터 스크롤 가능! */
+}
+
+/* 슬라이드 밖으로 삐져나간 개체의 파란 편집점(핸들 8개 + 회전 핸들) 및 테두리 실선 네이티브 연장 */
+.slide-overflow-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 85;
+  overflow: visible;
+}
+
+.native-mirror-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.native-mirror-outside-group {
+  cursor: move;
+}
+
+.native-mirror-poly {
+  fill: rgba(59, 130, 246, 0.08);
+  stroke: #3B82F6;
+  stroke-width: 1.5;
+  pointer-events: all;
+  cursor: move;
+}
+
+.native-mirror-line {
+  stroke: #3B82F6;
+  stroke-width: 1.5;
+  pointer-events: stroke;
+  cursor: move;
+}
+
+.native-mirror-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3B82F6;
+  border: 1.5px solid #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  box-sizing: border-box;
+  z-index: 86;
+  transition: transform 0.1s ease;
+}
+
+.native-mirror-corner:hover {
+  background: #2563EB;
+  transform: translate(-50%, -50%) scale(1.25);
 }
 
 /* Right Inspector */
@@ -931,7 +1115,7 @@ body {
   text-align: right;
 }
 
-/* [요청 반영 3]: 위로 / 아래로 직관적인 레이어 순서 버튼 */
+/* 위로 / 아래로 직관적인 레이어 순서 버튼 */
 .btn-group-4 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -983,7 +1167,7 @@ body {
   text-align: center;
 }
 
-/* [기현쌤 요청 반영]: 위로/맨위로, 아래로/맨아래로 사이 세로 구분선이 있는 2열 그리드 */
+/* 위로/맨위로, 아래로/맨아래로 사이 세로 구분선이 있는 2열 그리드 */
 .context-menu-paired-grid {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -1043,7 +1227,28 @@ body {
   margin-left: 12px;
 }
 
-/* ================= [기현쌤 요청 반영]: 우클릭 표 설정 서브 플라이아웃 메뉴 ================= */
+.context-menu-item.disabled {
+  opacity: 0.42 !important;
+  cursor: not-allowed !important;
+}
+
+.context-menu-item.disabled:hover {
+  background: transparent !important;
+  color: #E2E8F0 !important;
+}
+
+/* 숫자 입력 필드 스핀 화살표(증감 버튼) 제거 */
+input.no-spinner::-webkit-outer-spin-button,
+input.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+input.no-spinner {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+
+/* ================= 우클릭 표 설정 서브 플라이아웃 메뉴 ================= */
 .context-submenu-wrapper {
   position: relative;
 }
@@ -1237,7 +1442,7 @@ body {
   opacity: 1;
 }
 
-/* ================= [기현쌤 요청 반영]: 중앙선(안내선) 토글 체크박스 스타일 ================= */
+/* ================= 중앙선(안내선) 토글 체크박스 스타일 ================= */
 .guideline-toggle-label {
   display: inline-flex;
   align-items: center;
@@ -1268,7 +1473,7 @@ body {
   margin: 0;
 }
 
-/* ================= [기현쌤 요청 반영]: 저장 및 히스토리 모달 스타일 ================= */
+/* ================= 저장 및 히스토리 모달 스타일 ================= */
 .btn-save {
   background: #10B981 !important;
   border-color: #059669 !important;
@@ -1314,9 +1519,9 @@ body {
 
 /* 히스토리 모달 카드 */
 .history-modal-card {
-  width: 680px;
-  max-width: 90vw;
-  max-height: 82vh;
+  width: 860px;
+  max-width: 94vw;
+  max-height: 85vh;
   background: #1E293B;
   border: 1px solid #334155;
   border-radius: 12px;
@@ -1452,18 +1657,24 @@ body {
 }
 
 .history-info-left {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  margin-right: 16px;
 }
 
 .history-file-name {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   color: #F8FAFC;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
+  word-break: break-all;
+  line-height: 1.4;
 }
 
 .history-badge {
@@ -1471,6 +1682,7 @@ body {
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .history-badge.badge-auto {
@@ -1492,6 +1704,7 @@ body {
   font-size: 12px;
   color: #64748B;
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
@@ -1499,6 +1712,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .history-restore-btn {
@@ -1536,3 +1750,162 @@ body {
   color: #EF4444;
   background: rgba(239, 68, 68, 0.15);
 }
+
+/* ================= 단일 셀 분할 모달 팝업 ================= */
+.split-cell-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  justify-content: center;
+  align-items: center;
+}
+
+.split-cell-card {
+  background: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  width: 380px;
+  max-width: 90vw;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+  padding: 20px 24px;
+  color: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: modalFadeIn 0.15s ease-out;
+}
+
+.split-cell-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 12px;
+}
+
+.split-cell-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #38BDF8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.split-cell-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 13px;
+}
+
+.split-cell-body p {
+  margin: 0;
+  color: #94A3B8;
+  line-height: 1.4;
+}
+
+.split-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.split-checkbox-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0F172A;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+}
+
+.split-check-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #E2E8F0;
+  font-size: 13px;
+}
+
+.split-check-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #38BDF8;
+  cursor: pointer;
+}
+
+.split-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.split-unit {
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+.split-count-input {
+  width: 56px;
+  padding: 6px 8px;
+  background: #1E293B;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+}
+
+.split-count-input:focus {
+  border-color: #38BDF8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+}
+
+.split-cell-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.split-cell-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+
+.split-cell-btn.cancel {
+  background: #334155;
+  color: #CBD5E1;
+}
+
+.split-cell-btn.cancel:hover {
+  background: #475569;
+  color: #FFFFFF;
+}
+
+.split-cell-btn.confirm {
+  background: #0284C7;
+  color: #FFFFFF;
+}
+
+.split-cell-btn.confirm:hover {
+  background: #0369A1;
+}
+

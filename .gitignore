@@ -5,3 +5,5 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+.slide-src/
+test_user_preview.html

@@ -1,8 +1,8 @@
 {
-  "name": "coslide",
-  "displayName": "Co-Slide",
+  "name": "co-slide-ppt",
+  "displayName": "Co-Slide PPT",
   "description": "Next-generation presentation slide editor with AI agent pairing & native PPTX export",
-  "version": "0.1.2",
+  "version": "0.2.6",
   "publisher": "catnipnap",
   "license": "MIT",
   "repository": {
@@ -23,7 +23,7 @@
     "customEditors": [
       {
         "viewType": "slideStudio.editor",
-        "displayName": "Co-Slide",
+        "displayName": "Co-Slide PPT",
         "selector": [
           {
             "filenamePattern": "*.slide.json"
@@ -35,7 +35,14 @@
     "commands": [
       {
         "command": "slideStudio.createNewDeck",
-        "title": "Co-Slide: 새 프레젠테이션 생성"
+        "title": "Co-Slide PPT: 새 프레젠테이션 생성"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "-workbench.action.gotoLine",
+        "key": "ctrl+g",
+        "when": "activeCustomEditorId == 'slideStudio.editor'"
       }
     ]
   },
