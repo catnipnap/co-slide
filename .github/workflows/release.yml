@@ -1,22 +1,19 @@
-name: Publish Extension to Open VSX
+name: Release & Publish Extension
 
 on:
-  release:
-    types: [published]
   push:
     tags:
       - 'v*'
-  workflow_dispatch: # GitHub Actions 웹 페이지에서 수동으로 'Run workflow' 버튼 클릭하여 배포 가능
+  workflow_dispatch:
 
 jobs:
-  publish:
-    name: Publish to Open VSX
+  release:
+    name: Build, Release & Publish
     runs-on: ubuntu-latest
 
-    # Open VSX Trusted Publishing 필수 OIDC 권한
     permissions:
       id-token: write
-      contents: read
+      contents: write # GitHub Release 및 VSIX 파일 첨부 권한
 
     steps:
       - name: Checkout Repository
@@ -37,5 +34,15 @@ jobs:
       - name: Package VSIX
         run: npx @vscode/vsce package --no-git-tag-version
 
+      - name: Create GitHub Release and Upload VSIX
+        uses: softprops/action-gh-release@v2
+        with:
+          files: '*.vsix'
+          name: Release ${{ github.ref_name }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Publish to Open VSX Registry (OIDC Tokenless)
+        continue-on-error: true
         run: npx ovsx publish --no-git-tag-version
