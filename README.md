@@ -131,7 +131,7 @@ Co-Slide PPT는 **시각적 위지윅 에디터(Extension)**와 **전용 AI 페�
 
 질문, 개선 아이디어, 버그 제보 등 언제든지 편하게 연락주세요!  
 * 📧 **Email**: [rlgus5126@gmail.com](mailto:rlgus5126@gmail.com)  
-* 🐙 **GitHub**: [https://github.com/catnipnap/co-slide](https://github.com/catnipnap/co-slide)
+* 🐙 **GitHub**: [https://github.com/catnipnap/co-slide-ppt](https://github.com/catnipnap/co-slide-ppt)
 
 ---
 
