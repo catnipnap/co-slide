@@ -5,5 +5,8 @@ tsconfig.json
 .git/**
 .gitignore
 preview.html
+test_user_preview.html
+.slide-src/**
+*.vsix
 presentation.slide.json
 samples/**
